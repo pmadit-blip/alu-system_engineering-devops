@@ -7,3 +7,4 @@ This project covers connecting to a server securely with SSH.
 | File | Description |
 |------|-------------|
 | `0-use_a_private_key` | Bash script that connects to a server as `ubuntu` using the private key `~/.ssh/school` |
+| `1-create_ssh_key_pair` | Bash script that creates a 4096-bit RSA key pair named `school`, protected by a passphrase |
