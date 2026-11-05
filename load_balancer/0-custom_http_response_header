@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Configure Nginx with a custom HTTP response header
+
+set -e
+
+# Install Nginx
+sudo apt-get update -y
+sudo apt-get install -y nginx
+
+# Get the hostname of the current server
+HOSTNAME=$(hostname)
+
+# Nginx default configuration file
+NGINX_CONFIG="/etc/nginx/sites-available/default"
+
+# Make sure the default server block exists
+if ! sudo grep -q "server_name _;" "$NGINX_CONFIG"; then
+    echo "Error: Default Nginx server block not found."
+    exit 1
+fi
+
+# Add or update the custom response header
+if sudo grep -q "add_header X-Served-By" "$NGINX_CONFIG"; then
+    sudo sed -i "s|^[[:space:]]*add_header X-Served-By .*;|        add_header X-Served-By ${HOSTNAME} always;|" "$NGINX_CONFIG"
+else
+    sudo sed -i "/server_name _;/a\\        add_header X-Served-By ${HOSTNAME} always;" "$NGINX_CONFIG"
+fi
+
+# Test the Nginx configuration
+sudo nginx -t
+
+# Enable and restart Nginx
+sudo systemctl enable nginx
+sudo systemctl restart nginx
+
+echo "Nginx configured successfully on ${HOSTNAME}"
