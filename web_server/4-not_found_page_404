@@ -3,17 +3,13 @@
 
 sudo mkdir -p /var/www/html
 
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
 
 if ! sudo grep -q "error_page 404 /404.html;" /etc/nginx/sites-available/default
 then
     sudo sed -i '/server_name _;/a\
-    error_page 404 /404.html;\
-    location = /404.html {\
-        root /var/www/html;\
-        internal;\
-    }' /etc/nginx/sites-available/default
+    error_page 404 /404.html;' /etc/nginx/sites-available/default
 fi
 
 sudo nginx -t
-sudo systemctl reload nginx
+sudo service nginx restart
