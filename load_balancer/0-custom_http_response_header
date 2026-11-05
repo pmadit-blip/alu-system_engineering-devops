@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
-# Configure Nginx to return the server hostname in its HTTP response header.
+# Configure Nginx to return a custom HTTP response header.
 # shellcheck disable=SC2154
 
-set -euo pipefail
+set -e
 
-SERVER_HOSTNAME="$(hostname)"
+HOSTNAME=$(hostname)
+NGINX_CONFIG="/etc/nginx/sites-available/default"
 
 # Install Nginx
 sudo apt-get update -y
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nginx
+sudo apt-get install -y nginx
 
-# Configure the custom HTTP response header
-printf 'add_header X-Served-By "%s" always;\n' "$SERVER_HOSTNAME" |
-    sudo tee /etc/nginx/conf.d/0-custom-http-response-header.conf > /dev/null
+# Add the custom header to the default server block
+if sudo grep -q "add_header X-Served-By" "$NGINX_CONFIG"; then
+    sudo sed -i "s|^[[:space:]]*add_header X-Served-By .*;|        add_header X-Served-By ${HOSTNAME} always;|" "$NGINX_CONFIG"
+else
+    sudo sed -i "/server_name _;/a\\        add_header X-Served-By ${HOSTNAME} always;" "$NGINX_CONFIG"
+fi
 
-# Validate the Nginx configuration
+# Test and restart Nginx
 sudo nginx -t
-
-# Enable and restart Nginx
 sudo systemctl enable nginx
 sudo systemctl restart nginx
 
-echo "Successfully configured X-Served-By: ${SERVER_HOSTNAME}"
+echo "Configured X-Served-By: ${HOSTNAME}"
