@@ -41,4 +41,4 @@ sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 sudo systemctl enable haproxy
 sudo service haproxy restart
 
-echo "HAProxy configured successfully."
+echo "HAProxy configured successfully with web-01 and web-02 using roundrobin."
