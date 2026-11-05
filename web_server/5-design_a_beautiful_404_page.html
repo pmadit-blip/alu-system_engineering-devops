@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A beautiful and friendly custom 404 error page.">
+    <title>404 - Page Not Found</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            background: linear-gradient(135deg, #100c2a, #29205b, #5138a5);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            text-align: center;
+            padding: 55px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+        }
+
+        .error-code {
+            font-size: clamp(100px, 22vw, 190px);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: 10px;
+            color: #ffffff;
+            text-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-code span {
+            color: #f9c74f;
+        }
+
+        h1 {
+            font-size: clamp(25px, 5vw, 38px);
+            margin: 20px 0;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #dedaf5;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .french-message {
+            color: #f9c74f;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background: #f9c74f;
+            color: #211744;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            background: #ffffff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            margin-top: 40px;
+            color: #bcb5df;
+            font-size: 13px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .message {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <div class="error-code">4<span>0</span>4</div>
+
+        <h1>Oops! You've Lost Your Way.</h1>
+
+        <p class="message">
+            The page you're looking for doesn't exist,
+            may have been moved, or is temporarily unavailable.
+        </p>
+
+        <p class="french-message">
+            Ceci n'est pas une page
+        </p>
+
+        <a href="/" class="home-button">Back to Homepage &rarr;</a>
+
+        <p class="footer">
+            Lost in cyberspace? Don't worry, there's always a way home.
+            <br><br>
+            &copy; 2026 | Designed with creativity and care.
+        </p>
+    </main>
+</body>
+</html>
