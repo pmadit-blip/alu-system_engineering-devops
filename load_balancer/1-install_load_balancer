@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Install and configure HAProxy to distribute HTTP traffic between two web servers.
+
+set -e
+
+# Install HAProxy
+sudo apt-get update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y haproxy
+
+# Configure HAProxy
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<'EOF'
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+
+frontend http_front
+    bind *:80
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    option httpchk GET /
+    server web-01 35.179.77.152:80 check
+    server web-02 18.133.238.148:80 check
+EOF
+
+# Validate HAProxy configuration
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# Enable and restart HAProxy using its service/init script
+sudo systemctl enable haproxy
+sudo service haproxy restart
+
+echo "HAProxy configured successfully."

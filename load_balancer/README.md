@@ -59,3 +59,20 @@ load_balancer/
 - Nginx
 - Bash scripting
 - Git and GitHub
+## Task 1: Install Your Load Balancer
+
+### Objective
+Install and configure HAProxy to distribute HTTP traffic between two Nginx web servers.
+
+### Configuration
+- Load balancer: 7335-lb-01
+- Load balancer IP: 35.177.104.53
+- Web server 1: 35.179.77.152
+- Web server 2: 18.133.238.148
+- Algorithm: Round-robin
+- Listening port: 80
+
+### Testing
+```bash
+curl -sI http://35.177.104.53
+sudo service haproxy status
