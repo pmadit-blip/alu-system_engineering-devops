@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install and configure HAProxy to distribute HTTP traffic between two web servers.
+# Install and configure HAProxy to distribute traffic between web-01 and web-02.
 
 set -e
 
@@ -25,11 +25,10 @@ defaults
 
 frontend http_front
     bind *:80
-    default_backend http_back
+    default_backend web_servers
 
-backend http_back
+backend web_servers
     balance roundrobin
-    option httpchk GET /
     server web-01 35.179.77.152:80 check
     server web-02 18.133.238.148:80 check
 EOF
@@ -37,8 +36,11 @@ EOF
 # Validate HAProxy configuration
 sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 
-# Enable and restart HAProxy using its service/init script
+# Enable and restart HAProxy
 sudo systemctl enable haproxy
 sudo service haproxy restart
 
-echo "HAProxy configured successfully with web-01 and web-02 using roundrobin."
+# Display configured backend servers
+echo "Configured backend server: web-01"
+echo "Configured backend server: web-02"
+echo "HAProxy is running with roundrobin load balancing."
