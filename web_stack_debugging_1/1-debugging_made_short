@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+sed -i 's/8080/80/g' /etc/nginx/sites-available/default
+sed -i 's|/run/nginx.pid|/tmp/nginx.pid|' /etc/nginx/nginx.conf
 nginx
