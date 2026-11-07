@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
-# Configure Nginx to listen on port 80 without init tracking
-sed -i -e 's/8080/80/g' -e 's|/run/nginx.pid|/tmp/nginx.pid|' /etc/nginx/sites-enabled/default /etc/nginx/nginx.conf
+# Configure Nginx to listen on port 80 independently
+sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+sed -i 's|/run/nginx.pid|/tmp/nginx.pid|' /etc/nginx/nginx.conf
 nginx
