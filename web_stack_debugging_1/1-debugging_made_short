@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Configure Nginx to listen on port 80 independently
+# Configure Nginx to listen on port 80 and restart it
 sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-sed -i 's|/run/nginx.pid|/tmp/nginx.pid|' /etc/nginx/nginx.conf
-nginx
+service nginx restart
