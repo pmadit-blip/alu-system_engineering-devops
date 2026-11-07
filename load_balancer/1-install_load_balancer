@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
-# Install and configure HAProxy to distribute traffic between web-01 and web-02.
+# Installs HAProxy and configures it to round-robin traffic between web-01 and web-02
 
-set -e
+STUDENT_ID="7335"
+WEB01_IP="35.179.77.152"
+WEB02_IP="18.133.238.148"
 
-# Install HAProxy
 sudo apt-get update -y
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y haproxy
+sudo apt-get install -y haproxy
 
-# Configure HAProxy
-sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<'EOF'
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null << CFGEOF
 global
     log /dev/log local0
     log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
     daemon
 
 defaults
@@ -23,24 +28,17 @@ defaults
     timeout client 50000
     timeout server 50000
 
-frontend http_front
+frontend http-front
     bind *:80
-    default_backend web_servers
+    default_backend web-backend
 
-backend web_servers
+backend web-backend
     balance roundrobin
-    server web-01 35.179.77.152:80 check
-    server web-02 18.133.238.148:80 check
-EOF
+    server ${STUDENT_ID}-web-01 ${WEB01_IP}:80 check
+    server ${STUDENT_ID}-web-02 ${WEB02_IP}:80 check
+CFGEOF
 
-# Validate HAProxy configuration
-sudo haproxy -c -f /etc/haproxy/haproxy.cfg
-
-# Enable and restart HAProxy
-sudo systemctl enable haproxy
+# Make HAProxy manageable via its init script and start on boot
+sudo sed -i 's/^ENABLED=0/ENABLED=1/' /etc/default/haproxy 2>/dev/null
+sudo systemctl enable haproxy 2>/dev/null
 sudo service haproxy restart
-
-# Display configured backend servers
-echo "Configured backend server: web-01"
-echo "Configured backend server: web-02"
-echo "HAProxy is running with roundrobin load balancing."
