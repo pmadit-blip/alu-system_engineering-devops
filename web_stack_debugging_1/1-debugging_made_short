@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Configure and launch Nginx on port 80
+# Fix Nginx port configuration
 sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
 nginx
