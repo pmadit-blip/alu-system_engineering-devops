@@ -1,4 +1,11 @@
 # Port forwarding from 8080 to 80
+# Configure NAT port forwarding for incoming TCP traffic.
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+
+# Port forwarding from 8080 to 80
 *nat
 :PREROUTING ACCEPT [0:0]
 -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
