@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Start Nginx on port 80 without service management
+# Configure and launch Nginx on port 80
 sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-nginx -g 'pid /tmp/nginx.pid;'
+nginx
