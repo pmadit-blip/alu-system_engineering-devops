@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Run Nginx as nginx on port 8080
+
+sed -i 's/listen 80 /listen 8080 /' /etc/nginx/sites-enabled/default
+sed -i 's/listen \[::\]:80 /listen [::]:8080 /' /etc/nginx/sites-enabled/default
+
+chmod 755 /etc/nginx /etc/nginx/sites-enabled
+chmod 644 /etc/nginx/nginx.conf
+chmod 644 /etc/nginx/sites-enabled/default
+
+mkdir -p /var/log/nginx /var/cache/nginx /var/lib/nginx
+chown -R nginx:nginx /var/log/nginx /var/cache/nginx /var/lib/nginx
+
+su -s /bin/sh nginx -c '/usr/sbin/nginx'
