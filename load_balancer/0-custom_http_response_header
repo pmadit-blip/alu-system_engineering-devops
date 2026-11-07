@@ -1,26 +1,17 @@
 #!/usr/bin/env bash
-# Configure Nginx to return a custom HTTP response header.
+# Installs Nginx and adds an X-Served-By header containing the server hostname
 # shellcheck disable=SC2154
 
-set -e
-
-HOSTNAME=$(hostname)
-NGINX_CONFIG="/etc/nginx/sites-available/default"
-
-# Install Nginx
 sudo apt-get update -y
 sudo apt-get install -y nginx
 
-# Add the custom header to the default server block
-if sudo grep -q "add_header X-Served-By" "$NGINX_CONFIG"; then
-    sudo sed -i "s|^[[:space:]]*add_header X-Served-By .*;|        add_header X-Served-By ${HOSTNAME} always;|" "$NGINX_CONFIG"
-else
-    sudo sed -i "/server_name _;/a\\        add_header X-Served-By ${HOSTNAME} always;" "$NGINX_CONFIG"
-fi
+# Remove any older X-Served-By lines so the header is only sent once
+sudo grep -rl "X-Served-By" /etc/nginx | xargs -r sudo sed -i '/X-Served-By/d'
 
-# Test and restart Nginx
+# Add the header for every site (conf.d files load inside the http block)
+sudo tee /etc/nginx/conf.d/custom_http_response_header.conf > /dev/null << 'EOF'
+add_header X-Served-By $hostname;
+EOF
+
 sudo nginx -t
-sudo systemctl enable nginx
-sudo systemctl restart nginx
-
-echo "Configured X-Served-By: ${HOSTNAME}"
+sudo service nginx restart
