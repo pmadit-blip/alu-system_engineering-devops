@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Run Nginx as the nginx user and listen on port 8080
-sed -i -e 's/listen 80 /listen 8080 /' -e 's/]:80 /]:8080 /' /etc/nginx/sites-enabled/default
+sed -i -e 's/listen 80\([ ;]\)/listen 8080\1/' -e 's/]:80\([ ;]\)/]:8080\1/' /etc/nginx/sites-enabled/default
 chown -R nginx:nginx /var/log/nginx /var/cache/nginx /var/lib/nginx
-pkill nginx || true
 install -o nginx -g nginx /dev/null /run/nginx.pid
+pkill nginx || true
 su -s /bin/sh nginx -c '/usr/sbin/nginx'
 pgrep -a nginx
