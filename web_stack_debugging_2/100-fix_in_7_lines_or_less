@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
-sed -i 's/listen 80/listen 8080/' /etc/nginx/sites-enabled/default
-sed -i 's/\]:80/]:8080/' /etc/nginx/sites-enabled/default
-chown -R nginx:nginx /var/log/nginx /var/cache/nginx
+sed -i -e 's/listen 80/listen 8080/' -e 's/\]:80/]:8080/' /etc/nginx/sites-enabled/default
+chown -R nginx:nginx /var/log/nginx /var/cache/nginx /var/lib/nginx
 chown nginx:nginx /run
-pkill nginx
+pkill nginx || true
+rm -f /run/nginx.pid
+su -s /bin/sh nginx -c '/usr/sbin/nginx'
