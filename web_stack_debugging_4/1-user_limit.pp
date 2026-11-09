@@ -1,6 +1,9 @@
-# Configure file limits for the holberton user.
+# Set the open-file limits for the holberton user.
 
-exec { 'change-os-configuration-for-holberton-user':
-  command => '/bin/bash -c "sed -i \"/^holberton[[:space:]]\\+\\(soft\\|hard\\)[[:space:]]\\+nofile[[:space:]]/d\" /etc/security/limits.conf && printf \"holberton soft nofile 65536\\nholberton hard nofile 65536\\n\" >> /etc/security/limits.conf"',
-  unless  => '/bin/grep -q "^holberton soft nofile 65536$" /etc/security/limits.conf && /bin/grep -q "^holberton hard nofile 65536$" /etc/security/limits.conf',
+file { '/etc/security/limits.d/99-holberton-nofile.conf':
+  ensure  => file,
+  owner   => 'root',
+  group   => 'root',
+  mode    => '0644',
+  content => "holberton soft nofile 65536\nholberton hard nofile 65536\n",
 }
